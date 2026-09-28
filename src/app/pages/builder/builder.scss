@@ -1,0 +1,150 @@
+.builder-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.builder {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header-card {
+  border-top: 8px solid var(--mat-sys-primary);
+}
+
+.title-field,
+.desc-field {
+  width: 100%;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question-card {
+  position: relative;
+  padding-left: 8px;
+  display: flex;
+
+  .drag-handle {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 16px;
+    cursor: grab;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  mat-card-content {
+    flex: 1;
+  }
+}
+
+.question-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  .question-title {
+    flex: 2;
+    min-width: 200px;
+  }
+
+  .question-type {
+    flex: 1;
+    min-width: 180px;
+  }
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .option-icon {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .option-field {
+    flex: 1;
+  }
+}
+
+.scale-config {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.scale-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .scale-select {
+    width: 80px;
+  }
+}
+
+.scale-labels {
+  display: flex;
+  gap: 12px;
+
+  .scale-label-field {
+    flex: 1;
+  }
+}
+
+.hint {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.question-footer {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  padding-top: 8px;
+  margin-top: 8px;
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.add-question {
+  align-self: flex-start;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}

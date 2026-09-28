@@ -1,0 +1,181 @@
+@if (form(); as f) {
+  <div class="builder-toolbar">
+    <button mat-icon-button (click)="goBack()" title="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="preview()">
+      <mat-icon>visibility</mat-icon>
+      Vista previa
+    </button>
+    <button mat-stroked-button (click)="viewResponses()">
+      <mat-icon>bar_chart</mat-icon>
+      Respuestas
+    </button>
+  </div>
+
+  <div class="builder">
+    <mat-card class="header-card" appearance="outlined">
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="title-field">
+          <input
+            matInput
+            placeholder="Formulario sin título"
+            [ngModel]="f.title"
+            (ngModelChange)="updateTitle($event)"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="desc-field">
+          <textarea
+            matInput
+            placeholder="Descripción"
+            rows="2"
+            [ngModel]="f.description"
+            (ngModelChange)="updateDescription($event)"
+          ></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <div cdkDropList class="question-list" (cdkDropListDropped)="drop($event)">
+      @for (question of f.questions; track question.id) {
+        <mat-card class="question-card" appearance="outlined" cdkDrag>
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          <mat-card-content>
+            <div class="question-row">
+              <mat-form-field appearance="fill" class="question-title">
+                <input
+                  matInput
+                  placeholder="Pregunta"
+                  [ngModel]="question.title"
+                  (ngModelChange)="updateQuestion(question.id, { title: $event })"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="question-type">
+                <mat-select
+                  [ngModel]="question.type"
+                  (ngModelChange)="onTypeChange(question, $event)"
+                >
+                  @for (opt of questionTypes; track opt.value) {
+                    <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            @if (isChoiceType(question.type)) {
+              <div class="options-list">
+                @for (option of question.options; track option.id) {
+                  <div class="option-row">
+                    <mat-icon class="option-icon">
+                      {{ question.type === 'checkbox' ? 'check_box_outline_blank' : 'radio_button_unchecked' }}
+                    </mat-icon>
+                    <mat-form-field appearance="fill" class="option-field">
+                      <input
+                        matInput
+                        [ngModel]="option.label"
+                        (ngModelChange)="updateOption(question, option.id, $event)"
+                      />
+                    </mat-form-field>
+                    <button
+                      mat-icon-button
+                      (click)="removeOption(question, option.id)"
+                      [disabled]="question.options.length <= 1"
+                      title="Eliminar opción"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                }
+                <button mat-button (click)="addOption(question)">
+                  <mat-icon>add</mat-icon>
+                  Agregar opción
+                </button>
+              </div>
+            }
+
+            @if (isScaleType(question.type)) {
+              <div class="scale-config">
+                <div class="scale-range">
+                  <mat-form-field appearance="fill" class="scale-select">
+                    <mat-select
+                      [ngModel]="question.scaleMin"
+                      (ngModelChange)="updateQuestion(question.id, { scaleMin: $event })"
+                    >
+                      @for (n of scaleMinOptions; track n) {
+                        <mat-option [value]="n">{{ n }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  <span>a</span>
+                  <mat-form-field appearance="fill" class="scale-select">
+                    <mat-select
+                      [ngModel]="question.scaleMax"
+                      (ngModelChange)="updateQuestion(question.id, { scaleMax: $event })"
+                    >
+                      @for (n of scaleMaxOptions; track n) {
+                        <mat-option [value]="n">{{ n }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="scale-labels">
+                  <mat-form-field appearance="fill" class="scale-label-field">
+                    <input
+                      matInput
+                      placeholder="Etiqueta inicial (opcional)"
+                      [ngModel]="question.scaleMinLabel"
+                      (ngModelChange)="updateQuestion(question.id, { scaleMinLabel: $event })"
+                    />
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" class="scale-label-field">
+                    <input
+                      matInput
+                      placeholder="Etiqueta final (opcional)"
+                      [ngModel]="question.scaleMaxLabel"
+                      (ngModelChange)="updateQuestion(question.id, { scaleMaxLabel: $event })"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+
+            @if (question.type === 'date' || question.type === 'time') {
+              <p class="hint">
+                {{ question.type === 'date' ? 'Se pedirá una fecha.' : 'Se pedirá una hora.' }}
+              </p>
+            }
+
+            <div class="question-footer">
+              <mat-slide-toggle
+                [ngModel]="question.required"
+                (ngModelChange)="updateQuestion(question.id, { required: $event })"
+              >
+                Obligatoria
+              </mat-slide-toggle>
+              <span class="spacer"></span>
+              <button mat-icon-button (click)="duplicateQuestion(question.id)" title="Duplicar">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="removeQuestion(question.id)"
+                [disabled]="f.questions.length <= 1"
+                title="Eliminar pregunta"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <button mat-stroked-button class="add-question" (click)="addQuestion()">
+      <mat-icon>add</mat-icon>
+      Agregar pregunta
+    </button>
+  </div>
+}

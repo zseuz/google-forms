@@ -1,60 +1,82 @@
-# FormsClone
+# Forms Clone
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
+Clon de **Google Forms** construido con **Angular** y **Angular Material**. Permite crear formularios con distintos tipos de pregunta, compartirlos para que otras personas los llenen, y revisar las respuestas en un resumen visual (gráfico de barras) o de forma individual.
 
-## Development server
+No usa backend: todo el estado (formularios y respuestas) se guarda en el `localStorage` del navegador.
 
-To start a local development server, run:
+## Características
 
-```bash
-ng serve
-```
+- **Constructor de formularios (drag & drop)**: título, descripción y preguntas reordenables arrastrándolas.
+- **8 tipos de pregunta**: respuesta corta, párrafo, opción múltiple, casillas, lista desplegable, escala lineal (rango configurable con etiquetas), fecha y hora.
+- **Preguntas obligatorias** con validación al enviar.
+- **Autoguardado**: los cambios en el editor se persisten automáticamente.
+- **Vista de llenado** tal como la vería un encuestado, con botón para volver a la página anterior.
+- **Respuestas**: conteo total, resumen por pregunta (barras de distribución para preguntas de opción/escala, listado de texto para las demás) y vista de respuestas individuales.
+- **Gestión de formularios**: crear, duplicar, eliminar (con confirmación) y borrar todas las respuestas de un formulario.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Stack técnico
 
-## Code scaffolding
+- [Angular 22](https://angular.dev/) — componentes standalone, signals y control flow (`@if`/`@for`/`@switch`)
+- [Angular Material](https://material.angular.dev/) + [Angular CDK](https://material.angular.dev/cdk) (drag & drop)
+- TypeScript, SCSS
+- Persistencia en `localStorage` (sin backend ni base de datos)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Requisitos
 
-```bash
-ng generate component component-name
-```
+- [Node.js](https://nodejs.org/) 20 o superior
+- npm 10 o superior
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Puesta en marcha
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Instalar dependencias:
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Levantar el servidor de desarrollo:
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Abre `http://localhost:4200/` en tu navegador. La app se recarga automáticamente al guardar cambios.
 
-## Additional Resources
+## Scripts disponibles
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-"# google-forms" 
+| Comando         | Descripción                                              |
+| --------------- | --------------------------------------------------------- |
+| `npm start`      | Inicia el servidor de desarrollo (`ng serve`)             |
+| `npm run build`  | Genera el build de producción en `dist/forms-clone`       |
+| `npm run watch`  | Build en modo desarrollo con recompilación automática     |
+| `npm test`       | Ejecuta las pruebas unitarias con Vitest                  |
+
+## Estructura del proyecto
+
+```
+src/app/
+├── core/
+│   ├── models.ts          # Tipos: FormModel, Question, FormResponse, etc.
+│   └── forms-store.ts     # Estado global (signals) + persistencia en localStorage
+├── shared/
+│   └── confirm-dialog/    # Diálogo de confirmación reutilizable
+└── pages/
+    ├── dashboard/         # Listado de formularios (crear, duplicar, eliminar)
+    ├── builder/           # Editor de preguntas con drag & drop y autoguardado
+    ├── fill/               # Vista de llenado para el encuestado
+    └── responses/          # Resumen y respuestas individuales
+```
+
+## Rutas
+
+| Ruta                              | Página                                  |
+| ---------------------------------- | ---------------------------------------- |
+| `/inicio`                          | Listado de formularios                   |
+| `/editar/:id`                      | Editor de un formulario                  |
+| `/formulario/:id`                  | Vista de llenado                         |
+| `/formulario/:id/respuestas`       | Resumen y respuestas individuales        |
+
+## Notas
+
+- Al no tener backend, los datos viven solo en el navegador donde se crearon; no se comparten entre dispositivos ni usuarios.
+- Ideas para evolucionar el proyecto: exportar respuestas a CSV, más tipos de pregunta (cuadrícula, carga de archivos), y un backend real (por ejemplo Firebase) para compartir formularios entre distintos usuarios.

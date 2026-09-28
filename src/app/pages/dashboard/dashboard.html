@@ -1,0 +1,52 @@
+<div class="dashboard">
+  <div class="dashboard__header">
+    <h1>Tus formularios</h1>
+    <button mat-flat-button color="primary" (click)="createForm()">
+      <mat-icon>add</mat-icon>
+      Nuevo formulario
+    </button>
+  </div>
+
+  @if (forms().length === 0) {
+    <div class="empty-state">
+      <mat-icon>description</mat-icon>
+      <p>Todavía no tienes formularios.</p>
+      <button mat-stroked-button color="primary" (click)="createForm()">Crear el primero</button>
+    </div>
+  } @else {
+    <div class="form-grid">
+      @for (form of forms(); track form.id) {
+        <mat-card class="form-card" appearance="outlined">
+          <mat-card-content (click)="openBuilder(form)">
+            <h3>{{ form.title || 'Formulario sin título' }}</h3>
+            <p class="meta">
+              {{ questionCount(form) }} pregunta{{ questionCount(form) === 1 ? '' : 's' }} ·
+              {{ responseCount(form.id) }} respuesta{{ responseCount(form.id) === 1 ? '' : 's' }}
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-icon-button (click)="openFill(form)" title="Llenar">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openResponses(form)" title="Respuestas">
+              <mat-icon>bar_chart</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu" title="Más opciones">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="duplicate(form)">
+                <mat-icon>content_copy</mat-icon>
+                <span>Duplicar</span>
+              </button>
+              <button mat-menu-item (click)="remove(form)">
+                <mat-icon>delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

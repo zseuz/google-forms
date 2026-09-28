@@ -1,0 +1,129 @@
+.responses-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.responses {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.count {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 8px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.summary-card h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tally-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 32px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+
+  .tally-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tally-bar {
+    height: 20px;
+    background: var(--mat-sys-surface-container-highest);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tally-fill {
+    height: 100%;
+    background: var(--mat-sys-primary);
+  }
+
+  .tally-count {
+    text-align: right;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.text-answers {
+  margin: 0;
+  padding-left: 18px;
+
+  .muted {
+    color: var(--mat-sys-on-surface-variant);
+    list-style: none;
+    margin-left: -18px;
+  }
+}
+
+.individual-index {
+  font-weight: 500;
+  margin: 0 0 8px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.individual-row {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .q-title {
+    font-size: 12px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .q-answer {
+    font-size: 14px;
+  }
+}

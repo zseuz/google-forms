@@ -1,0 +1,76 @@
+@if (form(); as f) {
+  <div class="responses-toolbar">
+    <a mat-icon-button [routerLink]="['/editar', f.id]" title="Volver al editor">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <h2>{{ f.title || 'Formulario sin título' }}</h2>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="clearResponses()" [disabled]="responses().length === 0">
+      <mat-icon>delete_sweep</mat-icon>
+      Borrar respuestas
+    </button>
+  </div>
+
+  <div class="responses">
+    @if (responses().length === 0) {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>Todavía no hay respuestas.</p>
+      </div>
+    } @else {
+      <p class="count">{{ responses().length }} respuesta{{ responses().length === 1 ? '' : 's' }}</p>
+
+      <mat-tab-group>
+        <mat-tab label="Resumen">
+          <div class="tab-content">
+            @for (question of f.questions; track question.id) {
+              <mat-card class="summary-card" appearance="outlined">
+                <mat-card-content>
+                  <h3>{{ question.title || 'Pregunta sin título' }}</h3>
+
+                  @if (isTallyType(question.type)) {
+                    @for (tally of tallyFor(question); track tally.label) {
+                      <div class="tally-row">
+                        <span class="tally-label">{{ tally.label }}</span>
+                        <div class="tally-bar">
+                          <div class="tally-fill" [style.width.%]="tally.percent"></div>
+                        </div>
+                        <span class="tally-count">{{ tally.count }}</span>
+                      </div>
+                    }
+                  } @else {
+                    <ul class="text-answers">
+                      @for (answer of textAnswersFor(question); track $index) {
+                        <li>{{ answer }}</li>
+                      } @empty {
+                        <li class="muted">Sin respuestas de texto</li>
+                      }
+                    </ul>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Individuales">
+          <div class="tab-content">
+            @for (response of responses(); track response.id; let i = $index) {
+              <mat-card class="individual-card" appearance="outlined">
+                <mat-card-content>
+                  <p class="individual-index">Respuesta {{ i + 1 }}</p>
+                  @for (question of f.questions; track question.id) {
+                    <div class="individual-row">
+                      <span class="q-title">{{ question.title || 'Pregunta sin título' }}</span>
+                      <span class="q-answer">{{ answerText(response.answers[question.id]) }}</span>
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    }
+  </div>
+}
